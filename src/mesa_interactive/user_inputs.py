@@ -52,6 +52,7 @@ def UserInputs(user_params, on_change=None):
                     value=options.get("value"),
                 )
             else:
-                raise ValueError(f"{input_type} is not a supported input type")
+                msg = f"{input_type} is not a supported input type"
+                raise ValueError(msg)
 
         solara.Button("Save and Reset", on_click=lambda: on_change(user_params))

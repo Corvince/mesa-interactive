@@ -1,6 +1,8 @@
+import copy
+
 import solara
 from mesa import Model
-import copy
+
 from mesa_interactive.timeline_controls import TimelineControls
 from mesa_interactive.user_inputs import UserInputs
 

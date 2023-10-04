@@ -1,6 +1,6 @@
-import solara
 import altair as alt
 import pandas as pd
+import solara
 
 
 def make_chart(variables, title):

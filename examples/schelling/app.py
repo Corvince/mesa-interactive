@@ -1,8 +1,8 @@
-from mesa_interactive.mesa_interactive import MesaInteractive
 from mesa_interactive.components.charts import make_chart
 from mesa_interactive.components.markdown import make_markdown
-from model import Schelling
 from mesa_interactive.components.vega_grid import make_grid
+from mesa_interactive.mesa_interactive import MesaInteractive
+from model import Schelling
 
 
 def on_click(model, x, y):

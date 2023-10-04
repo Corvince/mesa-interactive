@@ -1,6 +1,7 @@
 from typing import Callable
-import solara
+
 import ipywidgets as widgets
+import solara
 
 
 @solara.component
@@ -11,7 +12,7 @@ def TimelineControls(
     current_step: int,
     max_step: int,
 ):
-    playing = solara.use_reactive(False)
+    playing = solara.use_reactive(value=False)
 
     def on_value_play(_):
         if playing.value:

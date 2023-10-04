@@ -21,7 +21,7 @@ class SchellingAgent(mesa.Agent):
 
     def step(self):
         similar = 0
-        for neighbor in self.model.grid.iter_neighbors(self.pos, True):
+        for neighbor in self.model.grid.iter_neighbors(self.pos, moore=True):
             if neighbor.type == self.type:
                 similar += 1
 
