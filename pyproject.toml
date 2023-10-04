@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mesa_interactive"
+dynamic = ["version"]
+description = "Interactive visualization of Mesa simulations"
+readme = "README.md"
+requires-python = ">=3.6"
+license = "MIT"
+dependencies = ["mesa", "solara", "altair"]
+
+[tool.hatch.version]
+path = "src/mesa_interactive/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github", "/.vscode"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mesa_interactive"]
