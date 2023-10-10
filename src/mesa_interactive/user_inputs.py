@@ -49,4 +49,6 @@ def UserInputs(model_parameters, on_change=None):
         else:
             solara.InputText(param, value=value, on_value=change_handler)
 
-    solara.Button("Save and Reset", on_click=lambda: on_change(model_parameters))
+    solara.Button(
+        "Save and Reset", color="primary", on_click=lambda: on_change(model_parameters)
+    )

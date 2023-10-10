@@ -1,6 +1,6 @@
 import solara
 from mesa_interactive import MesaInteractive
-from mesa_interactive.components.vega_grid import create_grid
+from mesa_interactive.components.grid import create_grid
 from mesa_interactive.util import slide, static
 from model import ForestFire
 

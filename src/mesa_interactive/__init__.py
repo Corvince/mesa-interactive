@@ -1,6 +1,6 @@
 from .components.charts import create_chart
+from .components.grid import create_grid
 from .components.markdown import create_markdown
-from .components.vega_grid import create_grid
 from .interactive import MesaInteractive
 from .util import slide, static
 

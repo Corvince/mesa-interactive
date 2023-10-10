@@ -73,8 +73,6 @@ def MesaInteractive(
     with solara.Sidebar():
         UserInputs(model_params, handle_change_model_params)
 
-    solara.Text(f"Current Step: {current_step} ")
-
     TimelineControls(
         play_interval=play_interval,
         on_step=handle_step_timeline,

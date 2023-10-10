@@ -1,7 +1,7 @@
 from mesa_interactive import slide
 from mesa_interactive.components.charts import create_chart
+from mesa_interactive.components.grid import create_grid
 from mesa_interactive.components.markdown import create_markdown
-from mesa_interactive.components.vega_grid import create_grid
 from mesa_interactive.interactive import MesaInteractive
 from model import Schelling
 
