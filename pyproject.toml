@@ -49,4 +49,4 @@ extend-select = [
     "YTT",
 ]
 
-ignore = ["N802", "PLR0913"]
+ignore = ["N802", "PLR0913", "B018", "C901"]

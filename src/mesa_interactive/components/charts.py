@@ -3,7 +3,7 @@ import pandas as pd
 import solara
 
 
-def make_chart(variables, title):
+def create_chart(variables, title):
     @solara.component
     def Chart(model):
         initial_data = {"Step": [0]}

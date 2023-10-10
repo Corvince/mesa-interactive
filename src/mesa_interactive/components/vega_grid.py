@@ -1,6 +1,8 @@
 import json
+from typing import Callable
 
 import altair as alt
+import mesa
 import solara
 
 
@@ -17,13 +19,19 @@ def get_agent_data_from_coord_iter(data):
             yield agent_data
 
 
-def make_grid(color=None, click_handler=None):
-    return lambda model: Grid(model, color, click_handler)
+def create_grid(
+    color: str | None = None,
+    on_click: Callable[[mesa.Model, mesa.space.Coordinate], None] | None = None,
+) -> Callable[[mesa.Model], solara.component]:
+    return lambda model: Grid(model, color, on_click)
 
 
 def Grid(model, color=None, on_click=None):
     if color is None:
         color = "unique_id:N"
+
+    if color[-2] != ":":
+        color = color + ":N"
 
     data = solara.reactive(
         list(get_agent_data_from_coord_iter(model.grid.coord_iter()))

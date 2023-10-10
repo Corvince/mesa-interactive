@@ -1,49 +1,29 @@
-from mesa_interactive.components.charts import make_chart
-from mesa_interactive.components.markdown import make_markdown
-from mesa_interactive.components.vega_grid import make_grid
-from mesa_interactive.mesa_interactive import MesaInteractive
+from mesa_interactive import slide
+from mesa_interactive.components.charts import create_chart
+from mesa_interactive.components.markdown import create_markdown
+from mesa_interactive.components.vega_grid import create_grid
+from mesa_interactive.interactive import MesaInteractive
 from model import Schelling
 
 
-def on_click(model, x, y):
+def switch_agent_type(model, x, y):
     agent = model.grid.get_cell_list_contents([(x, y)])[0]
     agent.type = 1 - agent.type
 
 
-GridView = make_grid("type:N", click_handler=on_click)
-HappyCount = make_markdown(
+GridView = create_grid("type", on_click=switch_agent_type)
+HappyCount = create_markdown(
     lambda model: f"Happy Agents: {model.happy} of {len(model.schedule.agents)}"
 )
-HappyChart = make_chart({"happy"}, "Happy Agents")
+HappyChart = create_chart({"happy"}, "Happy Agents")
 
 
 model_params = {
-    "density": {
-        "type": "SliderFloat",
-        "value": 0.8,
-        "label": "Agent density",
-        "min": 0.1,
-        "max": 1.0,
-        "step": 0.1,
-    },
-    "minority_pc": {
-        "type": "SliderFloat",
-        "value": 0.2,
-        "label": "Fraction minority",
-        "min": 0.0,
-        "max": 1.0,
-        "step": 0.05,
-    },
-    "homophily": {
-        "type": "SliderInt",
-        "value": 3,
-        "label": "Homophily",
-        "min": 0,
-        "max": 8,
-        "step": 1,
-    },
     "width": 20,
     "height": 20,
+    "density": slide(0, 1, 0.1, default=0.65),
+    "minority_pc": slide(0, 1, 0.05, default=0.2),
+    "homophily": slide(0, 8, 1, default=3),
 }
 
 page = MesaInteractive(
@@ -52,4 +32,4 @@ page = MesaInteractive(
     components=[HappyCount, GridView, HappyChart],
     name="Schelling",
 )
-page  # noqa
+page

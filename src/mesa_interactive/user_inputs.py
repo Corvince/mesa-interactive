@@ -1,58 +1,52 @@
 import solara
 
+from mesa_interactive.util import Slide
+
 
 @solara.component
-def UserInputs(user_params, on_change=None):
-    """Initialize user inputs for configurable model parameters.
-    Currently supports :class:`solara.SliderInt`, :class:`solara.SliderFloat`,
-    :class:`solara.Select`, and :class:`solara.Checkbox`.
+def UserInputs(model_parameters, on_change=None):
+    for param in model_parameters:
+        value = model_parameters[param]
 
-    Props:
-        user_params: dictionary with options for the input, including label,
-        min and max values, and other fields specific to the input type.
-        on_change: function to be called with updated inputs.
-    """
-    with solara.Card(title="Model Parameters"):
-        for name, options in user_params.items():
-            # label for the input is "label" from options or name
-            label = options.get("label", name)
-            input_type = options.get("type")
+        def change_handler(value, name=param):
+            param = model_parameters[name]
+            if isinstance(param, Slide):
+                model_parameters[name].value = value
+            elif isinstance(param, list):
+                model_parameters[name][0] = value
+            else:
+                model_parameters[name] = value
 
-            def change_handler(value, name=name):
-                user_params[name]["value"] = value
-
-            if input_type == "SliderInt":
+        if isinstance(value, bool):
+            solara.Checkbox(label=param, value=value, on_value=change_handler)
+        elif isinstance(value, Slide):
+            if isinstance(value.step, int):
                 solara.SliderInt(
-                    label,
-                    value=options.get("value"),
+                    label=param,
+                    value=value.value,
+                    min=value.start,
+                    max=value.stop,
+                    step=value.step,
                     on_value=change_handler,
-                    min=options.get("min"),
-                    max=options.get("max"),
-                    step=options.get("step"),
-                )
-            elif input_type == "SliderFloat":
-                solara.SliderFloat(
-                    label,
-                    value=options.get("value"),
-                    on_value=change_handler,
-                    min=options.get("min"),
-                    max=options.get("max"),
-                    step=options.get("step"),
-                )
-            elif input_type == "Select":
-                solara.Select(
-                    label,
-                    value=options.get("value"),
-                    on_value=change_handler,
-                    values=options.get("values"),
-                )
-            elif input_type == "Checkbox":
-                solara.Checkbox(
-                    label=label,
-                    value=options.get("value"),
                 )
             else:
-                msg = f"{input_type} is not a supported input type"
-                raise ValueError(msg)
+                solara.SliderFloat(
+                    label=param,
+                    value=value.value,
+                    min=value.start,
+                    max=value.stop,
+                    step=value.step,
+                    on_value=change_handler,
+                )
+        elif isinstance(value, list):
+            solara.Select(
+                label=param, value=value[0], values=value, on_value=change_handler
+            )
+        elif isinstance(value, float):
+            solara.InputFloat(param, value=value, on_value=change_handler)
+        elif isinstance(value, int):
+            solara.InputInt(param, value=value, on_value=change_handler)
+        else:
+            solara.InputText(param, value=value, on_value=change_handler)
 
-        solara.Button("Save and Reset", on_click=lambda: on_change(user_params))
+    solara.Button("Save and Reset", on_click=lambda: on_change(model_parameters))
