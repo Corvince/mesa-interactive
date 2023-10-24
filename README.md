@@ -1,4 +1,5 @@
 # Mesa Interactive
+[![PyPi](https://img.shields.io/pypi/v/mesa_interactive.svg)](https://pypi.python.org/pypi/mesa_interactive)
 
 ## Overview
 
