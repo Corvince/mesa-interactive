@@ -7,7 +7,7 @@ from model import Schelling
 
 
 def switch_agent_type(model, x, y):
-    agent = model.grid.get_cell_list_contents([(x, y)])[0]
+    agent = model.grid[x, y]
     agent.type = 1 - agent.type
 
 
@@ -32,4 +32,3 @@ page = MesaInteractive(
     components=[HappyCount, GridView, HappyChart],
     name="Schelling",
 )
-page

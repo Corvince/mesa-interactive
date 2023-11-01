@@ -1,4 +1,5 @@
 # Mesa Interactive
+
 [![PyPi](https://img.shields.io/pypi/v/mesa_interactive.svg)](https://pypi.python.org/pypi/mesa_interactive)
 
 ## Overview
@@ -13,7 +14,7 @@ To quickly install the package, open your terminal and run:
 pip install mesa_interactive
 ```
 
-## Example: Visualizing a Schelling Segregation Model
+## Tutorial: Visualizing the Schelling Segregation Model
 
 This section provides a step-by-step walkthrough to visualize a Schelling Segregation model using Mesa Interactive.
 
@@ -27,38 +28,34 @@ pip install -U -e git+https://github.com/projectmesa/mesa-examples#egg=mesa-mode
 
 ### Importing Dependencies
 
-Load the essential libraries as follows:
+Import the essential libraries as follows:
 
 ```python
 import solara
-from mesa_interactive import slide, static
-from mesa_interactive.components import create_chart, create_grid, create_markdown
-from mesa_interactive.interactive import MesaInteractive
 from mesa_models.schelling.model import Schelling
+
+from mesa_interactive import MesaInteractive, slide, static
+from mesa_interactive.components import create_chart, create_grid, create_markdown
 ```
 
-### Defining Custom Functions
+### Building Components
 
-1. **Switch Agent Type**: Create a function to toggle an agent's type when clicked on the grid.
+1. **Instructions**: Add Markdown instructions. We use the _static_ helper function, since it doesn't rely on model parameters.
+
+```python
+Instructions = static(solara.Markdown("Click on an agent to switch its type."))
+```
+
+####
+
+2. **GridView**: Construct a grid view, enabling a `switch_agent_type` function on agent click.
 
 ```python
 def switch_agent_type(model, x, y):
     agent = model.grid.get_cell_list_contents([(x, y)])[0]
     agent.type = 1 - agent.type
-```
 
-### Building Components
-
-1. **GridView**: Construct a grid view, enabling the `switch_agent_type` function on agent click.
-
-```python
-GridView = create_grid("type", on_click=switch_agent_type)
-```
-
-2. **Instructions**: Add Markdown instructions. These are static and don't rely on model parameters.
-
-```python
-Instructions = static(solara.Markdown("Click on an agent to switch its type."))
+GridView = create_grid(color="type", on_click=switch_agent_type)
 ```
 
 3. **HappyCount**: Display the number of satisfied agents via a Markdown component.
@@ -72,12 +69,12 @@ HappyCount = create_markdown(
 4. **HappyChart**: Implement a time-series chart to track the number of happy agents.
 
 ```python
-HappyChart = create_chart("happy", "Happy Agents")
+HappyChart = create_chart(variables=["happy"], "Happy Agents")
 ```
 
 ### Configuring Model Parameters
 
-Define user-adjustable model parameters using sliders:
+Define user-adjustable model parameters using default values and the _slide_ helper functions. It works like the built-in _range_ function but supports arbitrary steps and a default value.
 
 ```python
 model_params = {
@@ -103,10 +100,18 @@ page = MesaInteractive(
 )
 ```
 
-2. To render and display all the components, simply call:
+2. To render your visulazation save your python file as `app.py` and from a terminal run
+
+```
+solara run app.py
+```
+
+Alternatively you can but everything in a Jupyter notebook and simply call
 
 ```python
 page
 ```
 
-Now you have a fully interactive visualization for the Schelling Segregation model!
+to show the visualization.
+
+Now you have built a fully interactive visualization for the Schelling Segregation model!

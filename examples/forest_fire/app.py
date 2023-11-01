@@ -21,4 +21,3 @@ app = MesaInteractive(
     ],
     show_dataframe="model",
 )
-app
