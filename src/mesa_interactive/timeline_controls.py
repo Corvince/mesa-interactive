@@ -1,6 +1,6 @@
+import time
 from typing import Callable
 
-import ipywidgets as widgets
 import solara
 
 
@@ -14,9 +14,10 @@ def TimelineControls(
 ):
     playing = solara.use_reactive(value=False)
 
-    def on_value_play(_):
+    def play_simulation():
         if playing.value:
             on_step(current_step + 1)
+            time.sleep(play_interval / 1000)
 
     def change_step(value):
         return lambda: on_step(max(0, value))
@@ -25,44 +26,52 @@ def TimelineControls(
         playing.value = False
         on_reset()
 
+    solara.use_thread(
+        play_simulation,
+        dependencies=[playing.value, current_step],
+    )
+
+    def handle_click_start_stop():
+        playing.value = not playing.value
+
     with solara.Card(title="Model Controls"), solara.Column(
         gap="40px",
     ):
         with solara.Row(gap="2px", style={"align-items": "center"}):
             with solara.Tooltip("Reset the model"):
                 solara.Button(icon_name="mdi-reload", color="primary", on_click=reset)
+            with solara.Tooltip("Play / Pause simulation"):
+                solara.Button(
+                    icon_name="mdi-play-pause",
+                    color="primary",
+                    on_click=handle_click_start_stop,
+                )
             with solara.Tooltip("Step backward to the beginning"):
                 solara.Button(
                     icon_name="mdi-skip-backward",
                     color="primary",
+                    disabled=playing.value,
                     on_click=change_step(0),
                 )
             with solara.Tooltip("Step backward"):
                 solara.Button(
-                    label="-1",
+                    icon_name="mdi-step-backward",
                     color="primary",
+                    disabled=playing.value,
                     on_click=change_step(current_step - 1),
                 )
-            widgets.Play(
-                value=0,
-                interval=play_interval,
-                show_repeat=False,
-                on_value=on_value_play,
-                playing=playing.value,
-                on_playing=playing.set,
-                layout=widgets.Layout(height="36px"),
-            )
-            widgets.Button(description="hi")
             with solara.Tooltip("Step forward"):
                 solara.Button(
-                    label="+1",
+                    icon_name="mdi-step-forward",
                     color="primary",
+                    disabled=playing.value,
                     on_click=change_step(current_step + 1),
                 )
             with solara.Tooltip("Step forward to the end"):
                 solara.Button(
                     icon_name="mdi-skip-forward",
                     color="primary",
+                    disabled=playing.value,
                     on_click=change_step(max_step),
                 )
         solara.SliderInt(
