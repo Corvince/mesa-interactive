@@ -6,18 +6,18 @@ import mesa
 import solara
 
 
-def get_agent_data_from_coord_iter(data):
-    for agent, (x, y) in data:
-        if agent:
-            agent_data = json.loads(
-                json.dumps(agent.__dict__, skipkeys=True, default=str)
-            )
-            agent_data["x"] = x
-            agent_data["y"] = y
-            agent_data.pop("model", None)
-            agent_data.pop("pos", None)
-            yield agent_data
-
+def get_agent_data_from_coord_iter(agents_per_coordinate):
+    for agents, (x, y) in agents_per_coordinate:
+        if agents:  # Checking if the list is non-empty
+            for agent in agents:
+                agent_data = json.loads(
+                    json.dumps(agent.__dict__, skipkeys=True, default=str)
+                )
+                agent_data["x"] = x
+                agent_data["y"] = y
+                agent_data.pop("model", None)
+                agent_data.pop("pos", None)
+                yield agent_data
 
 def create_grid(
     color: str | None = None,
