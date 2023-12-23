@@ -9,7 +9,7 @@ import solara
 def get_agent_data_from_coord_iter(agents_per_coordinate):
     for agents, (x, y) in agents_per_coordinate:
         if agents:  # Checking if the list is non-empty
-            if agents not isinstance(list):
+            if not isinstance(agents, list):
                 agents = [agents]
             for agent in agents:
                 agent_data = json.loads(
