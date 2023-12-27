@@ -50,14 +50,15 @@ def TimelineControls(
                 solara.Button(
                     icon_name="mdi-skip-backward",
                     color="primary",
-                    disabled=playing.value,
+                    disabled=playing.value or current_step == 0,
                     on_click=change_step(0),
+                    style={"margin-left": "2rem"},
                 )
             with solara.Tooltip("Step backward"):
                 solara.Button(
                     icon_name="mdi-step-backward",
                     color="primary",
-                    disabled=playing.value,
+                    disabled=playing.value or current_step == 0,
                     on_click=change_step(current_step - 1),
                 )
             with solara.Tooltip("Step forward"):
@@ -71,7 +72,7 @@ def TimelineControls(
                 solara.Button(
                     icon_name="mdi-skip-forward",
                     color="primary",
-                    disabled=playing.value,
+                    disabled=playing.value or current_step == max_step,
                     on_click=change_step(max_step),
                 )
         solara.SliderInt(
